@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="SavedRoute" representedClassName="SavedRoute" syncable="YES" codeGenerationType="class">
+        <attribute name="endLatitude" optional="NO" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="endLongitude" optional="NO" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="endName" optional="YES" attributeType="String"/>
+        <attribute name="frequentlyUsed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastUsed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startLatitude" optional="NO" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startLongitude" optional="NO" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startName" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="UserPreferences" representedClassName="UserPreferences" syncable="YES" codeGenerationType="class">
+        <attribute name="avoidHighways" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="avoidTolls" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="preferredLanePosition" attributeType="String" defaultValueString="middle"/>
+        <attribute name="vibrationEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="voiceEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+    </entity>
+</model>
