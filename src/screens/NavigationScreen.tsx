@@ -13,10 +13,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import MapView from 'react-native-maps';
+import { StyleSheet, View, Alert } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SafetyWarningModal from '../components/SafetyWarningModal';
+import LocationService, { LocationState } from '../services/LocationService';
 
 /**
  * Main navigation screen component that handles map display and user interaction.
@@ -26,8 +27,53 @@ import SafetyWarningModal from '../components/SafetyWarningModal';
  * @returns {JSX.Element} The navigation screen component
  */
 export default function NavigationScreen() {
-  // State to control the visibility of the safety warning modal
   const [showSafetyWarning, setShowSafetyWarning] = useState(false);
+  const [location, setLocation] = useState<LocationState | null>(null);
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
+
+  /**
+   * Initialize location services and request permissions
+   */
+  const initializeLocation = async () => {
+    try {
+      const hasPermission = await LocationService.requestPermissions();
+      setHasLocationPermission(hasPermission);
+
+      if (hasPermission) {
+        // Start location updates
+        await LocationService.startLocationUpdates(
+          (newLocation) => {
+            setLocation(newLocation);
+          },
+          (error) => {
+            Alert.alert('Location Error', 'Unable to get your location. Please check your GPS settings.');
+          }
+        );
+
+        // Get initial location
+        const currentLocation = await LocationService.getCurrentLocation();
+        setLocation(currentLocation);
+      } else {
+        Alert.alert(
+          'Location Permission Required',
+          'LaneBuddy needs access to your location for navigation. Please enable it in your settings.'
+        );
+      }
+    } catch (error) {
+      console.error('Error initializing location:', error);
+      Alert.alert('Error', 'Failed to initialize location services');
+    }
+  };
+
+  // Request location permissions and initialize location tracking
+  useEffect(() => {
+    initializeLocation();
+    checkSafetyWarning();
+    return () => {
+      // Cleanup location subscription when component unmounts
+      LocationService.stopLocationUpdates();
+    };
+  }, []);
 
   /**
    * Initial region for the map view, centered on a default location
@@ -70,16 +116,36 @@ export default function NavigationScreen() {
     <View style={styles.container}>
       <MapView
         style={styles.map}
-        initialRegion={{
+        provider={PROVIDER_GOOGLE}
+        showsUserLocation
+        followsUserLocation
+        region={location ? {
+          latitude: location.latitude,
+          longitude: location.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        } : {
           latitude: 37.78825,
           longitude: -122.4324,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      />
+      >
+        {location && (
+          <Marker
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+            title="You are here"
+            description={`Heading: ${location.heading}°, Speed: ${location.speed} m/s`}
+          />
+        )}
+      </MapView>
+
       <SafetyWarningModal
         visible={showSafetyWarning}
-        onAccept={handleAcceptSafety}
+        onAccept={() => setShowSafetyWarning(false)}
       />
     </View>
   );
@@ -90,7 +156,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
 });
