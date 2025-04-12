@@ -1,3 +1,14 @@
+/**
+ * RoutesScreen Component
+ * 
+ * Screen component for managing saved routes.
+ * 
+ * @component
+ * @param {NavigationProps} props - Navigation props from React Navigation
+ * @returns {JSX.Element} The routes screen component
+ * - Sorting and filtering options
+ */
+
 import React from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 

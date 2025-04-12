@@ -1,14 +1,69 @@
+/**
+ * SettingsScreen Component
+ * 
+ * Allows users to customize their navigation preferences and app settings.
+ * This screen provides various options to personalize the navigation experience
+ * and manage app-wide configurations.
+ * 
+ * Features:
+ * - Navigation preferences
+ * - Voice guidance settings
+ * - Map display options
+ * - Privacy settings
+ * - Data management
+ */
+
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Switch } from 'react-native';
 
+/**
+ * Settings screen component for app configuration and preferences.
+ * 
+ * @component
+ * @param {NavigationProps} props - Navigation props from React Navigation
+ * @returns {JSX.Element} The settings screen component
+ */
 export default function SettingsScreen() {
+  /**
+   * State variable to store the user's preference for avoiding highways.
+   * 
+   * @type {boolean}
+   */
   const [avoidHighways, setAvoidHighways] = useState(false);
+
+  /**
+   * State variable to store the user's preference for avoiding tolls.
+   * 
+   * @type {boolean}
+   */
   const [avoidTolls, setAvoidTolls] = useState(false);
+
+  /**
+   * State variable to store the user's preference for enabling voice guidance.
+   * 
+   * @type {boolean}
+   */
   const [voiceEnabled, setVoiceEnabled] = useState(true);
+
+  /**
+   * State variable to store the user's preference for enabling vibration.
+   * 
+   * @type {boolean}
+   */
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
 
   return (
+    /**
+     * Container view for the settings screen.
+     * 
+     * @type {JSX.Element}
+     */
     <View style={styles.container}>
+      /**
+       * Section view for navigation preferences.
+       * 
+       * @type {JSX.Element}
+       */
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Navigation Preferences</Text>
         <View style={styles.setting}>

@@ -1,20 +1,62 @@
+/**
+ * SafetyWarningModal Component
+ * 
+ * A modal component that displays important safety information to users
+ * before they start using the navigation features. This ensures users
+ * understand the importance of safe driving and proper app usage.
+ * 
+ * Features:
+ * - Clear safety guidelines
+ * - Persistent acceptance tracking
+ * - Accessible design
+ * - One-time display with AsyncStorage persistence
+ */
+
 import React from 'react';
 import {
   Modal,
-  View,
-  Text,
   StyleSheet,
+  Text,
+  View,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+/**
+ * Props interface for the SafetyWarningModal component
+ * 
+ * @property visible - Controls the visibility of the modal
+ * @property onAccept - Callback function when user accepts the safety guidelines
+ */
 interface SafetyWarningModalProps {
   visible: boolean;
   onAccept: () => void;
 }
 
-export default function SafetyWarningModal({ visible, onAccept }: SafetyWarningModalProps) {
+/**
+ * Modal component that displays driving safety guidelines and warnings.
+ * Shows only once to new users and stores acceptance in AsyncStorage.
+ * 
+ * @component
+ * @param {SafetyWarningModalProps} props - Component props
+ * @returns {JSX.Element} The safety warning modal component
+ */
+const SafetyWarningModal: React.FC<SafetyWarningModalProps> = ({ visible, onAccept }) => {
+  /**
+   * Handles the user's acceptance of safety guidelines.
+   * Stores acceptance in AsyncStorage and triggers the onAccept callback.
+   */
+  const handleAccept = async () => {
+    try {
+      await AsyncStorage.setItem('safetyWarningAccepted', 'true');
+      onAccept();
+    } catch (error) {
+      console.error('Error saving safety warning acceptance:', error);
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -64,7 +106,7 @@ export default function SafetyWarningModal({ visible, onAccept }: SafetyWarningM
 
           <TouchableOpacity
             style={styles.acceptButton}
-            onPress={onAccept}
+            onPress={handleAccept}
           >
             <Text style={styles.acceptButtonText}>I Understand and Accept</Text>
           </TouchableOpacity>
@@ -72,7 +114,7 @@ export default function SafetyWarningModal({ visible, onAccept }: SafetyWarningM
       </View>
     </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
   centeredView: {

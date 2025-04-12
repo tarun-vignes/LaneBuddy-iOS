@@ -5,8 +5,15 @@
  * and theme for the entire app. It uses React Navigation's bottom tab navigator
  * to provide easy access to the main features: navigation, saved routes, and settings.
  * 
- * The app follows a safety-first approach with built-in warnings and guidelines
- * to ensure responsible use while driving.
+ * Key Features:
+ * - Bottom tab navigation for intuitive user experience
+ * - Integration with Google Maps for real-time navigation
+ * - Safety-first approach with built-in warnings
+ * - Gesture handling for smooth user interactions
+ * - Safe area support for modern device compatibility
+ * 
+ * @author Tarun Vignes
+ * @version 1.0.0
  */
 
 import React from 'react';
@@ -23,10 +30,16 @@ import NavigationScreen from './src/screens/NavigationScreen';
 import RoutesScreen from './src/screens/RoutesScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 
-// Initialize the bottom tab navigator with type safety
+/**
+ * Initialize the bottom tab navigator with TypeScript type safety.
+ * RootStackParamList defines the available screens and their parameters.
+ */
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
-// Custom theme that matches the app's design language
+/**
+ * Custom theme configuration for the navigation container.
+ * Extends the default theme with our brand colors and styling.
+ */
 const navigationTheme = {
   ...DefaultTheme,
   colors: {
@@ -43,6 +56,18 @@ const screenOptions: BottomTabNavigationOptions = {
   headerShown: true,
 };
 
+/**
+ * Main application component that sets up the app's navigation structure
+ * and provides necessary context providers for features like gestures and safe areas.
+ * 
+ * The component hierarchy is:
+ * - GestureHandlerRootView (for gesture support)
+ * - SafeAreaProvider (for safe area insets)
+ * - NavigationContainer (for routing)
+ * - Tab.Navigator (for bottom tab navigation)
+ * 
+ * @returns {JSX.Element} The root component of the application
+ */
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
